@@ -23,16 +23,14 @@ class TestConnectivityAnalyzer:
         sample_water_polygons: gpd.GeoDataFrame,
     ) -> None:
         """Test connectivity analysis."""
-        analyzer = ConnectivityAnalyzer(sample_config)
+        ConnectivityAnalyzer(sample_config)
         # TODO: Create sample transect lines and implement test
         pass
 
     @pytest.mark.skip(reason="Not yet implemented")
-    def test_calculate_connectivity_statistics(
-        self, sample_config: Config
-    ) -> None:
+    def test_calculate_connectivity_statistics(self, sample_config: Config) -> None:
         """Test connectivity statistics calculation."""
-        analyzer = ConnectivityAnalyzer(sample_config)
+        ConnectivityAnalyzer(sample_config)
         # TODO: Implement test
         pass
 
@@ -41,6 +39,6 @@ class TestConnectivityAnalyzer:
         self, sample_config: Config, sample_landscape_metrics: pd.DataFrame
     ) -> None:
         """Test bottleneck identification."""
-        analyzer = ConnectivityAnalyzer(sample_config)
+        ConnectivityAnalyzer(sample_config)
         # TODO: Implement test
         pass

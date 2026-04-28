@@ -13,7 +13,6 @@ Example:
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, Optional
 
 import yaml
 
@@ -23,13 +22,15 @@ class ShapefileConfig:
     """Configuration for shapefiles used in analysis."""
 
     habitat_polygons: Path
-    connectivity_lines: Optional[Path] = None
-    volume_slices: Optional[Path] = None
+    connectivity_lines: Path | None = None
+    volume_slices: Path | None = None
 
     def __post_init__(self) -> None:
         """Validate shapefiles exist."""
         if not self.habitat_polygons.exists():
-            raise FileNotFoundError(f"Habitat polygons not found: {self.habitat_polygons}")
+            raise FileNotFoundError(
+                f"Habitat polygons not found: {self.habitat_polygons}"
+            )
 
 
 @dataclass
@@ -58,14 +59,14 @@ class Config:
     output_dir: Path = field(default_factory=lambda: Path("./output"))
 
     # Shapefiles
-    shapefiles: Optional[ShapefileConfig] = None
+    shapefiles: ShapefileConfig | None = None
 
     # Processing parameters
     min_polygon_area_m2: float = 5000.0
     flood_trigger_habitats: list = field(default_factory=list)
 
     # Landscape metrics
-    landscape_metrics: Optional[LandscapeMetricsConfig] = None
+    landscape_metrics: LandscapeMetricsConfig | None = None
 
     def __post_init__(self) -> None:
         """Convert string paths to Path objects and create output directories."""
@@ -106,16 +107,48 @@ def load_config(config_path: str | Path) -> Config:
         If configuration file does not exist
     ValueError
         If configuration is invalid
+
+    Example
+    -------
+    >>> config = load_config("config.yaml")
+    >>> print(config.water_year)
+    2023
     """
     config_path = Path(config_path)
 
     if not config_path.exists():
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
 
-    with open(config_path) as f:
-        config_dict = yaml.safe_load(f)
+    try:
+        with open(config_path) as f:
+            config_dict = yaml.safe_load(f)
+    except yaml.YAMLError as e:
+        raise ValueError(f"Invalid YAML in configuration file: {e}") from e
 
-    return Config(**config_dict)
+    if config_dict is None:
+        raise ValueError("Configuration file is empty")
+
+    # Handle nested shapefiles configuration
+    if "shapefiles" in config_dict and config_dict["shapefiles"] is not None:
+        shapefiles_dict = config_dict["shapefiles"]
+        # Convert string paths to Path objects
+        shapefiles_dict = {
+            k: Path(v) if isinstance(v, str) else v for k, v in shapefiles_dict.items()
+        }
+        config_dict["shapefiles"] = ShapefileConfig(**shapefiles_dict)
+
+    # Handle nested landscape_metrics configuration
+    if (
+        "landscape_metrics" in config_dict
+        and config_dict["landscape_metrics"] is not None
+    ):
+        metrics_dict = config_dict["landscape_metrics"]
+        config_dict["landscape_metrics"] = LandscapeMetricsConfig(**metrics_dict)
+
+    try:
+        return Config(**config_dict)
+    except TypeError as e:
+        raise ValueError(f"Invalid configuration parameters: {e}") from e
 
 
 def save_config(config: Config, output_path: str | Path) -> None:
@@ -128,6 +161,11 @@ def save_config(config: Config, output_path: str | Path) -> None:
         Configuration object to save
     output_path : str or Path
         Path to save configuration file
+
+    Example
+    -------
+    >>> config = Config(water_year=2023)
+    >>> save_config(config, "config.yaml")
     """
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -143,5 +181,32 @@ def save_config(config: Config, output_path: str | Path) -> None:
         "flood_trigger_habitats": config.flood_trigger_habitats,
     }
 
-    with open(output_path, "w") as f:
-        yaml.dump(config_dict, f, default_flow_style=False)
+    # Add shapefiles configuration if present
+    if config.shapefiles is not None:
+        config_dict["shapefiles"] = {
+            "habitat_polygons": str(config.shapefiles.habitat_polygons),
+            "connectivity_lines": (
+                str(config.shapefiles.connectivity_lines)
+                if config.shapefiles.connectivity_lines is not None
+                else None
+            ),
+            "volume_slices": (
+                str(config.shapefiles.volume_slices)
+                if config.shapefiles.volume_slices is not None
+                else None
+            ),
+        }
+
+    # Add landscape_metrics configuration if present
+    if config.landscape_metrics is not None:
+        config_dict["landscape_metrics"] = {
+            "patch_metrics": config.landscape_metrics.patch_metrics,
+            "class_metrics": config.landscape_metrics.class_metrics,
+            "percentiles": config.landscape_metrics.percentiles,
+        }
+
+    try:
+        with open(output_path, "w") as f:
+            yaml.dump(config_dict, f, default_flow_style=False, sort_keys=False)
+    except OSError as e:
+        raise OSError(f"Failed to write configuration to {output_path}: {e}") from e

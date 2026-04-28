@@ -6,14 +6,9 @@ filtering by area, and intersection with habitat polygons.
 """
 
 from pathlib import Path
-from typing import Optional
 
 import geopandas as gpd
-import numpy as np
 import rioxarray  # noqa: F401
-import xarray as xr
-from rasterio.features import shapes
-from shapely.geometry import shape
 
 from .config import Config
 
@@ -31,7 +26,7 @@ class RasterProcessor:
             Configuration object
         """
         self.config = config
-        self.habitat_gdf: Optional[gpd.GeoDataFrame] = None
+        self.habitat_gdf: gpd.GeoDataFrame | None = None
 
     def load_habitat_polygons(self) -> gpd.GeoDataFrame:
         """
@@ -68,7 +63,7 @@ class RasterProcessor:
     def filter_by_area(
         self,
         polygons: gpd.GeoDataFrame,
-        min_area_m2: Optional[float] = None,
+        min_area_m2: float | None = None,
     ) -> gpd.GeoDataFrame:
         """
         Filter polygons by minimum area.

@@ -1,7 +1,6 @@
 """Tests for spatio_hydrograph.landscape_metrics module."""
 
 import geopandas as gpd
-import pandas as pd
 import pytest
 
 from spatio_hydrograph.config import Config
@@ -21,7 +20,7 @@ class TestLandscapeMetrics:
         self, sample_config: Config, sample_raster
     ) -> None:
         """Test patch metrics calculation."""
-        metrics = LandscapeMetrics(sample_config)
+        LandscapeMetrics(sample_config)
         # TODO: Implement test
         pass
 
@@ -30,7 +29,7 @@ class TestLandscapeMetrics:
         self, sample_config: Config, sample_raster
     ) -> None:
         """Test class metrics calculation."""
-        metrics = LandscapeMetrics(sample_config)
+        LandscapeMetrics(sample_config)
         # TODO: Implement test
         pass
 
@@ -39,13 +38,13 @@ class TestLandscapeMetrics:
         self, sample_config: Config, sample_water_polygons: gpd.GeoDataFrame
     ) -> None:
         """Test area statistics calculation."""
-        metrics = LandscapeMetrics(sample_config)
+        LandscapeMetrics(sample_config)
         # TODO: Implement test
         pass
 
     @pytest.mark.skip(reason="Not yet implemented")
     def test_calculate_percentiles(self, sample_config: Config) -> None:
         """Test percentile calculation."""
-        metrics = LandscapeMetrics(sample_config)
+        LandscapeMetrics(sample_config)
         # TODO: Implement test
         pass
