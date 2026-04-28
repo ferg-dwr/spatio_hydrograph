@@ -1,0 +1,78 @@
+# Spatio-Hydrograph Configuration Example
+# Copy this to config.yaml and modify for your analysis
+
+# ============================================
+# ANALYSIS PARAMETERS
+# ============================================
+
+# Water year for analysis (e.g., 2023)
+water_year: 2023
+
+# Analysis version identifier (for output naming)
+analysis_version: "_v1"
+
+# ============================================
+# DATA DIRECTORIES
+# ============================================
+
+# Root data directory (relative or absolute path)
+data_dir: "./data"
+
+# Sentinel-1 input directory (Lee Sigma classification)
+s1_input_dir: "./data/S1_WY2023"
+
+# Sentinel-2 input directory (AWEIsh classification)
+s2_input_dir: "./data/S2_WY2023"
+
+# Output directory for results
+output_dir: "./output"
+
+# ============================================
+# VECTOR FILES (SHAPEFILES)
+# ============================================
+
+shapefiles:
+  # Yolo Bypass habitat polygons
+  habitat_polygons: "./vectors/YoloBypassForSH_UTM_wat.shp"
+
+  # Optional: Parallel lines for lateral connectivity analysis
+  connectivity_lines: "./vectors/parallel_lines.shp"
+
+  # Optional: E-W slices for volume calculations
+  volume_slices: "./vectors/polygon_slices.shp"
+
+# ============================================
+# PROCESSING PARAMETERS
+# ============================================
+
+# Minimum polygon area to retain (square meters)
+# Polygons smaller than this are filtered out
+min_polygon_area_m2: 5000.0
+
+# Habitat names that trigger flood detection
+# Used to identify when flooding begins
+flood_trigger_habitats:
+  - "First"
+  - "Last"
+
+# ============================================
+# LANDSCAPE METRICS CONFIGURATION
+# ============================================
+
+landscape_metrics:
+  # Patch-level metrics to calculate
+  patch_metrics:
+    - "area"                    # Patch area
+    - "core_area"               # Core area (excluding edge)
+    - "perimeter_area_ratio"    # PARA
+
+  # Class-level metrics to calculate
+  class_metrics:
+    - "clumpiness"              # Clumping index
+    - "cohesion"                # Cohesion index
+
+  # Percentiles to calculate for distributions
+  percentiles:
+    - 10   # P10
+    - 50   # P50 (median)
+    - 90   # P90

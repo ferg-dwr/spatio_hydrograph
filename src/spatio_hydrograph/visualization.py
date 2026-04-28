@@ -6,9 +6,7 @@ landscape metrics, and connectivity analysis.
 """
 
 from pathlib import Path
-from typing import Optional
 
-import matplotlib.pyplot as plt
 import pandas as pd
 
 from .config import Config
@@ -17,7 +15,9 @@ from .config import Config
 class Visualizer:
     """Generate visualizations from analysis results."""
 
-    def __init__(self, config: Config, figsize: tuple = (10, 6), dpi: int = 300) -> None:
+    def __init__(
+        self, config: Config, figsize: tuple = (10, 6), dpi: int = 300
+    ) -> None:
         """
         Initialize visualizer.
 
@@ -35,7 +35,7 @@ class Visualizer:
         self.dpi = dpi
 
     def plot_habitat_time_series(
-        self, habitat_data: pd.DataFrame, output_file: Optional[Path] = None
+        self, habitat_data: pd.DataFrame, output_file: Path | None = None
     ) -> None:
         """
         Plot habitat inundated area time series.
@@ -51,7 +51,7 @@ class Visualizer:
         raise NotImplementedError("plot_habitat_time_series not yet implemented")
 
     def plot_percent_water(
-        self, habitat_data: pd.DataFrame, output_file: Optional[Path] = None
+        self, habitat_data: pd.DataFrame, output_file: Path | None = None
     ) -> None:
         """
         Plot percent water coverage by habitat.
@@ -67,7 +67,7 @@ class Visualizer:
         raise NotImplementedError("plot_percent_water not yet implemented")
 
     def plot_lateral_connectivity(
-        self, connectivity_data: pd.DataFrame, output_file: Optional[Path] = None
+        self, connectivity_data: pd.DataFrame, output_file: Path | None = None
     ) -> None:
         """
         Plot lateral connectivity time series with uncertainty.
@@ -83,7 +83,7 @@ class Visualizer:
         raise NotImplementedError("plot_lateral_connectivity not yet implemented")
 
     def plot_patch_size_distribution(
-        self, landscape_metrics: pd.DataFrame, output_file: Optional[Path] = None
+        self, landscape_metrics: pd.DataFrame, output_file: Path | None = None
     ) -> None:
         """
         Plot patch size distribution over time.
@@ -99,7 +99,7 @@ class Visualizer:
         raise NotImplementedError("plot_patch_size_distribution not yet implemented")
 
     def plot_core_area_distribution(
-        self, landscape_metrics: pd.DataFrame, output_file: Optional[Path] = None
+        self, landscape_metrics: pd.DataFrame, output_file: Path | None = None
     ) -> None:
         """
         Plot core area distribution over time.
@@ -118,7 +118,7 @@ class Visualizer:
         self,
         s1_data: pd.DataFrame,
         s2_data: pd.DataFrame,
-        output_file: Optional[Path] = None,
+        output_file: Path | None = None,
     ) -> None:
         """
         Compare results between Sentinel-1 and Sentinel-2.

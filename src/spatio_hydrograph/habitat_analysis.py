@@ -5,8 +5,6 @@ Calculates per-habitat inundated area, percent water coverage,
 and flood duration metrics.
 """
 
-from typing import Dict, Optional
-
 import geopandas as gpd
 import pandas as pd
 
@@ -27,9 +25,7 @@ class HabitatAnalyzer:
         """
         self.config = config
 
-    def calculate_habitat_areas(
-        self, water_polygons: gpd.GeoDataFrame
-    ) -> pd.DataFrame:
+    def calculate_habitat_areas(self, water_polygons: gpd.GeoDataFrame) -> pd.DataFrame:
         """
         Calculate inundated area per habitat.
 
@@ -63,7 +59,7 @@ class HabitatAnalyzer:
         # TODO: Implement percent calculation
         raise NotImplementedError("calculate_percent_inundated not yet implemented")
 
-    def identify_flood_status(self, habitat_areas: pd.DataFrame) -> Dict[str, bool]:
+    def identify_flood_status(self, habitat_areas: pd.DataFrame) -> dict[str, bool]:
         """
         Identify which habitats are currently flooded.
 

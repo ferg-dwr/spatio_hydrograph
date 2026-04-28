@@ -27,7 +27,7 @@ class TestRasterProcessor:
     @pytest.mark.skip(reason="Not yet implemented")
     def test_raster_to_polygons(self, sample_config: Config, sample_raster) -> None:
         """Test raster-to-vector conversion."""
-        processor = RasterProcessor(sample_config)
+        RasterProcessor(sample_config)
         # TODO: Implement test
         pass
 
@@ -36,7 +36,7 @@ class TestRasterProcessor:
         self, sample_config: Config, sample_water_polygons: gpd.GeoDataFrame
     ) -> None:
         """Test polygon area filtering."""
-        processor = RasterProcessor(sample_config)
+        RasterProcessor(sample_config)
         # TODO: Implement test
         pass
 
@@ -48,6 +48,6 @@ class TestRasterProcessor:
         sample_habitat_polygons: gpd.GeoDataFrame,
     ) -> None:
         """Test polygon intersection."""
-        processor = RasterProcessor(sample_config)
+        RasterProcessor(sample_config)
         # TODO: Implement test
         pass

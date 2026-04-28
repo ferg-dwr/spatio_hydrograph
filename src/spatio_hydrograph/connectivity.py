@@ -5,8 +5,6 @@ Measures lateral connectivity of flooded areas using transect lines
 and water level measurements at endpoints.
 """
 
-from typing import Optional
-
 import geopandas as gpd
 import pandas as pd
 
@@ -56,7 +54,7 @@ class ConnectivityAnalyzer:
     def calculate_connectivity_endpoints(
         self,
         transect_lines: gpd.GeoDataFrame,
-        water_raster: Optional[object] = None,
+        water_raster: object | None = None,
     ) -> pd.DataFrame:
         """
         Calculate water levels at transect endpoints.
@@ -74,7 +72,9 @@ class ConnectivityAnalyzer:
             Start/end point water levels and status
         """
         # TODO: Implement endpoint calculation
-        raise NotImplementedError("calculate_connectivity_endpoints not yet implemented")
+        raise NotImplementedError(
+            "calculate_connectivity_endpoints not yet implemented"
+        )
 
     def calculate_connectivity_statistics(
         self, connectivity_data: pd.DataFrame
@@ -93,7 +93,9 @@ class ConnectivityAnalyzer:
             Mean and SD of connectivity (m)
         """
         # TODO: Implement connectivity statistics
-        raise NotImplementedError("calculate_connectivity_statistics not yet implemented")
+        raise NotImplementedError(
+            "calculate_connectivity_statistics not yet implemented"
+        )
 
     def identify_bottlenecks(
         self, connectivity_data: pd.DataFrame, threshold_percentile: float = 10.0

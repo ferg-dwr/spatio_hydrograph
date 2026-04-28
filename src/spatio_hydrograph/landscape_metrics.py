@@ -5,8 +5,6 @@ Computes patch metrics (area, core area, perimeter), class metrics
 (clumpiness, cohesion), and percentile distributions.
 """
 
-from typing import Optional
-
 import geopandas as gpd
 import numpy as np
 import pandas as pd
@@ -29,9 +27,7 @@ class LandscapeMetrics:
         """
         self.config = config
 
-    def calculate_patch_metrics(
-        self, classified_raster: xr.DataArray
-    ) -> pd.DataFrame:
+    def calculate_patch_metrics(self, classified_raster: xr.DataArray) -> pd.DataFrame:
         """
         Calculate patch-level metrics (area, core area, PARA).
 
@@ -48,9 +44,7 @@ class LandscapeMetrics:
         # TODO: Implement patch metrics calculation
         raise NotImplementedError("calculate_patch_metrics not yet implemented")
 
-    def calculate_class_metrics(
-        self, classified_raster: xr.DataArray
-    ) -> pd.DataFrame:
+    def calculate_class_metrics(self, classified_raster: xr.DataArray) -> pd.DataFrame:
         """
         Calculate class-level metrics (clumpiness, cohesion).
 
@@ -123,7 +117,7 @@ class LandscapeMetrics:
         raise NotImplementedError("calculate_para_statistics not yet implemented")
 
     def calculate_percentiles(
-        self, values: np.ndarray, percentiles: Optional[list] = None
+        self, values: np.ndarray, percentiles: list | None = None
     ) -> dict:
         """
         Calculate percentile values for an array.
