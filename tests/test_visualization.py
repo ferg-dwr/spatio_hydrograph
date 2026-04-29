@@ -1,5 +1,9 @@
 """Tests for spatio_hydrograph.visualization module."""
 
+import matplotlib
+
+matplotlib.use("Agg")  # Use non-interactive backend before importing pyplot
+
 from pathlib import Path
 
 import pandas as pd
