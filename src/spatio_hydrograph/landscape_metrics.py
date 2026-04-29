@@ -5,7 +5,6 @@ Computes patch metrics (area, core area, perimeter), class metrics
 (clumpiness, cohesion), and percentile distributions.
 """
 
-from typing import Optional
 
 import geopandas as gpd
 import numpy as np
@@ -146,7 +145,7 @@ class LandscapeMetrics:
         Clumpiness = measure of patch aggregation/clustering.
         Cohesion = measure of spatial connectivity of class patches.
         Both range from 0 (dispersed) to 1 (perfectly clumped/cohesive).
-        
+
         Based on standard landscape ecology definitions.
         """
         data = classified_raster.values
@@ -164,7 +163,7 @@ class LandscapeMetrics:
         # Calculate Clumpiness Index
         # Clumpiness = (G_obs - G_exp) / (G_max - G_exp)
         # where G = number of joins between like cells
-        
+
         # Count joins (cells sharing edges)
         gx = water_pixels[:, :-1] * water_pixels[:, 1:]  # Horizontal joins
         gy = water_pixels[:-1, :] * water_pixels[1:, :]  # Vertical joins
@@ -183,10 +182,7 @@ class LandscapeMetrics:
         # Maximum joins (all clustered)
         g_max = total_pixels - 1
 
-        if g_max > g_exp:
-            clumpiness = (g_obs - g_exp) / (g_max - g_exp)
-        else:
-            clumpiness = 0.0
+        clumpiness = (g_obs - g_exp) / (g_max - g_exp) if g_max > g_exp else 0.0
 
         # Clamp to [0, 1]
         clumpiness = np.clip(clumpiness, 0.0, 1.0)
@@ -194,10 +190,10 @@ class LandscapeMetrics:
         # Calculate Cohesion Index
         # Cohesion = (1 - (number of disjunct parts) / (number of patches)) * 100
         # Simplified: use connectivity of largest component
-        
+
         # Label connected components
         labeled_array, num_features = ndimage.label(water_pixels)  # type: ignore
-        
+
         if num_features == 0:
             cohesion = 0.0
         else:
@@ -413,7 +409,7 @@ class LandscapeMetrics:
         return stats
 
     def calculate_percentiles(
-        self, values: np.ndarray | list | tuple, percentiles: Optional[list] = None
+        self, values: np.ndarray | list | tuple, percentiles: list | None = None
     ) -> dict:
         """
         Calculate percentile values for an array.
