@@ -15,9 +15,28 @@ from spatio_hydrograph.config import Config
 
 @pytest.fixture
 def temp_data_dir():
-    """Provide a temporary directory for test data."""
-    with TemporaryDirectory() as tmpdir:
-        yield Path(tmpdir)
+    """Provide a temporary directory for test data.
+
+    Handles Windows file cleanup issues by ignoring errors when
+    rasterio keeps file handles open.
+    """
+    import sys
+
+    tmpdir = TemporaryDirectory()
+    try:
+        yield Path(tmpdir.name)
+    finally:
+        # On Windows, rasterio may keep file handles open briefly
+        # Ignore cleanup errors and let the OS clean up later
+        try:
+            tmpdir.cleanup()
+        except (PermissionError, OSError) as e:
+            # Windows-specific issue: file in use by rasterio
+            if sys.platform == "win32" and isinstance(e, PermissionError):
+                # Just close the temp directory handle
+                tmpdir.name = None
+            else:
+                raise
 
 
 @pytest.fixture
