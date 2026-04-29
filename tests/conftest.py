@@ -20,23 +20,27 @@ def temp_data_dir():
     Handles Windows file cleanup issues by ignoring errors when
     rasterio keeps file handles open.
     """
+    import contextlib
     import sys
+    import time
 
     tmpdir = TemporaryDirectory()
     try:
         yield Path(tmpdir.name)
     finally:
         # On Windows, rasterio may keep file handles open briefly
-        # Ignore cleanup errors and let the OS clean up later
-        try:
+        # Wait a moment and retry cleanup
+        if sys.platform == "win32":
+            try:
+                tmpdir.cleanup()
+            except (PermissionError, OSError, NotADirectoryError):
+                # File still in use, wait and let OS clean up
+                time.sleep(0.1)
+                with contextlib.suppress(Exception):
+                    tmpdir.cleanup()
+        else:
+            # On Unix systems, use normal cleanup
             tmpdir.cleanup()
-        except (PermissionError, OSError) as e:
-            # Windows-specific issue: file in use by rasterio
-            if sys.platform == "win32" and isinstance(e, PermissionError):
-                # Just close the temp directory handle
-                tmpdir.name = None
-            else:
-                raise
 
 
 @pytest.fixture
