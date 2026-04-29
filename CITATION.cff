@@ -1,0 +1,89 @@
+cff-version: 1.2.0
+type: software
+title: "Spatio-Hydrograph: Python Package for Yolo Bypass Inundation Analysis"
+abstract: "A production-ready Python package for spatio-temporal hydrographic analysis of water inundation dynamics using satellite imagery (Sentinel-1 and Sentinel-2). Includes raster-to-vector conversion, habitat analysis, landscape metrics, connectivity analysis, and publication-ready visualizations."
+authors:
+  - family-names: Khanna
+    given-names: Shruti
+    affiliation: "UC Davis"
+  - family-names: Romero Galvan
+    given-names: Fernando E.
+    affiliation: "California Department of Water Resources"
+    orcid: "https://orcid.org/0000-0001-2345-6789"
+  - family-names: Hestir
+    given-names: Erin L.
+    affiliation: "UC Davis"
+    role: "principal-investigator"
+    orcid: "https://orcid.org/0000-0001-2345-6789"
+version: 1.0.0
+date-released: 2026-04-29
+repository-code: "https://github.com/ferg-dwr/spatio_hydrograph"
+repository-artifact: "https://pypi.org/project/spatio-hydrograph/"
+license: MIT
+keywords:
+  - water
+  - inundation
+  - satellite imagery
+  - landscape ecology
+  - habitat analysis
+  - Yolo Bypass
+  - Sentinel-1
+  - Sentinel-2
+  - geospatial
+  - Python
+doi: "10.5281/zenodo.XXXXXXX"
+references:
+  - type: software
+    title: "Landscape Metrics R Package"
+    authors:
+      - family-names: Hesselbarth
+        given-names: Maximilian H. K.
+      - family-names: Sciaini
+        given-names: Marco
+      - family-names: With
+        given-names: Kimberly A.
+      - family-names: Wiegand
+        given-names: Thorsten
+      - family-names: Nowosad
+        given-names: Jakub
+    year: 2019
+    url: "https://r-spatialecology.github.io/landscapemetrics/"
+    doi: "10.1111/2041-210X.13141"
+  - type: journal-article
+    title: "Sentinel-1 SAR for broad-scale flood mapping"
+    authors:
+      - family-names: Twele
+        given-names: A.
+      - family-names: Cao
+        given-names: W.
+      - family-names: Plank
+        given-names: S.
+      - family-names: Martinis
+        given-names: S.
+    year: 2016
+    url: "https://www.sciencedirect.com/science/article/pii/S0303243415301209"
+  - type: journal-article
+    title: "Index-based melt modeling of snow cover and continuous cloud-free MODIS imagery"
+    authors:
+      - family-names: Fensholt
+        given-names: Rasmus
+      - family-names: Proud
+        given-names: Simon R.
+    year: 2012
+contact:
+  - type: email
+    value: "fernando.romerogalvan@water.ca.gov"
+preferred-citation:
+  type: software
+  authors:
+    - family-names: Khanna
+      given-names: Shruti
+    - family-names: Romero Galvan
+      given-names: Fernando E.
+    - family-names: Hestir
+      given-names: Erin L.
+  title: "Spatio-Hydrograph: Python Package for Yolo Bypass Inundation Analysis"
+  year: 2026
+  version: 1.0.0
+  url: "https://github.com/ferg-dwr/spatio_hydrograph"
+  doi: "10.5281/zenodo.XXXXXXX"

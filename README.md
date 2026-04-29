@@ -390,13 +390,17 @@ If you use this software, please cite:
 
 ```bibtex
 @software{khanna_spatio_hydrograph_2026,
+  author = {Khanna, Shruti and Romero Galvan, Fernando E. and Hestir, Erin L.},
   title = {Spatio-Hydrograph: Python Package for Yolo Bypass Inundation Analysis},
-  author = {Khanna, Shruti and Romero Galvan, Fernando E.},
   year = {2026},
+  version = {1.0.0},
   url = {https://github.com/ferg-dwr/spatio_hydrograph},
-  version = {1.0.0}
 }
 ```
+
+For other citation formats, see [CITATION.cff](CITATION.cff) or [CITATION.bib](CITATION.bib).
+
+**Note:** Once a Zenodo DOI is assigned, the citation will include: `doi = {10.5281/zenodo.XXXXXXX}`
 
 ## License
 
@@ -404,6 +408,7 @@ This project is licensed under the MIT License—see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
+- **Principal Investigator**: Erin L. Hestir (UC Davis)
 - **Original Analysis**: Shruti Khanna (UC Davis)
 - **Python Translation & Package Development**: Fernando E. Romero Galvan (California Department of Water Resources)
 - **Data Sources**: Google Earth Engine, Sentinel-1 and Sentinel-2 imagery
@@ -693,11 +698,11 @@ If you use this software, please cite:
 
 ```bibtex
 @software{khanna_spatio_hydrograph_2026,
+  author = {Khanna, Shruti and Romero Galvan, Fernando E. and Hestir, Erin L.},
   title = {Spatio-Hydrograph: Python Package for Yolo Bypass Inundation Analysis},
-  author = {Khanna, Shruti, Erin Hestir, and Romero Galvan, Fernando E.},
   year = {2026},
+  version = {1.0.0},
   url = {https://github.com/ferg-dwr/spatio_hydrograph},
-  version = {0.1.0}
 }
 ```
 
