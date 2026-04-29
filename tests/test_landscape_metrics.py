@@ -53,7 +53,9 @@ class TestCalculatePercentiles:
         with pytest.raises(ValueError, match="Cannot calculate percentiles"):
             metrics.calculate_percentiles(values)
 
-    def test_calculate_percentiles_invalid_percentiles(self, sample_config: Config) -> None:
+    def test_calculate_percentiles_invalid_percentiles(
+        self, sample_config: Config
+    ) -> None:
         """Test error on invalid percentiles."""
         metrics = LandscapeMetrics(sample_config)
         values = np.array([1, 2, 3, 4, 5])
@@ -111,7 +113,9 @@ class TestCalculateCoreAreaStatistics:
     ) -> None:
         """Test basic core area calculation."""
         metrics = LandscapeMetrics(sample_config)
-        stats = metrics.calculate_core_area_statistics(sample_water_polygons, edge_distance=10.0)
+        stats = metrics.calculate_core_area_statistics(
+            sample_water_polygons, edge_distance=10.0
+        )
 
         assert "mean_m2" in stats
         assert "sd_m2" in stats
@@ -122,7 +126,9 @@ class TestCalculateCoreAreaStatistics:
     ) -> None:
         """Test core area with no edge (distance=0)."""
         metrics = LandscapeMetrics(sample_config)
-        stats = metrics.calculate_core_area_statistics(sample_water_polygons, edge_distance=0.0)
+        stats = metrics.calculate_core_area_statistics(
+            sample_water_polygons, edge_distance=0.0
+        )
 
         # With edge_distance=0, core area should equal total area
         total_stats = metrics.calculate_area_statistics(sample_water_polygons)
@@ -135,7 +141,9 @@ class TestCalculateCoreAreaStatistics:
         metrics = LandscapeMetrics(sample_config)
 
         with pytest.raises(ValueError, match="edge_distance must be non-negative"):
-            metrics.calculate_core_area_statistics(sample_water_polygons, edge_distance=-10.0)
+            metrics.calculate_core_area_statistics(
+                sample_water_polygons, edge_distance=-10.0
+            )
 
 
 class TestCalculateParaStatistics:
@@ -190,7 +198,11 @@ class TestCalculatePatchMetrics:
         metrics = LandscapeMetrics(sample_config)
         result = metrics.calculate_patch_metrics(sample_raster)
 
-        percentile_cols = [col for col in result.columns if 'p10' in col or 'p50' in col or 'p90' in col]
+        percentile_cols = [
+            col
+            for col in result.columns
+            if "p10" in col or "p50" in col or "p90" in col
+        ]
         assert len(percentile_cols) > 0
 
     def test_calculate_patch_metrics_empty_raster(self, sample_config: Config) -> None:

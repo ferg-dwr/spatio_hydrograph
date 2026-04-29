@@ -5,7 +5,6 @@ Computes patch metrics (area, core area, perimeter), class metrics
 (clumpiness, cohesion), and percentile distributions.
 """
 
-
 import geopandas as gpd
 import numpy as np
 import pandas as pd
@@ -29,9 +28,7 @@ class LandscapeMetrics:
         """
         self.config = config
 
-    def calculate_patch_metrics(
-        self, classified_raster: xr.DataArray
-    ) -> pd.DataFrame:
+    def calculate_patch_metrics(self, classified_raster: xr.DataArray) -> pd.DataFrame:
         """
         Calculate patch-level metrics (area, core area, PARA).
 
@@ -70,7 +67,9 @@ class LandscapeMetrics:
 
         # Convert raster to polygons
         polygon_list = []
-        for geom, value in shapes(data.astype(np.uint8), transform=classified_raster.rio.transform()):
+        for geom, value in shapes(
+            data.astype(np.uint8), transform=classified_raster.rio.transform()
+        ):
             # Only keep water features (value == 1)
             if value == 1:
                 polygon_list.append(shape(geom))
@@ -93,33 +92,33 @@ class LandscapeMetrics:
         para_stats = self.calculate_para_statistics(gdf)
 
         # Compile results into DataFrame
-        result = pd.DataFrame({
-            "total_patches": [len(gdf)],
-            "total_area_m2": [gdf["area_m2"].sum()],
-            "mean_area_m2": [area_stats["mean_m2"]],
-            "sd_area_m2": [area_stats["sd_m2"]],
-            "min_area_m2": [area_stats["min_m2"]],
-            "max_area_m2": [area_stats["max_m2"]],
-            "p10_area_m2": [area_stats["p10_m2"]],
-            "p50_area_m2": [area_stats["p50_m2"]],
-            "p90_area_m2": [area_stats["p90_m2"]],
-            "mean_core_area_m2": [core_stats["mean_m2"]],
-            "sd_core_area_m2": [core_stats["sd_m2"]],
-            "p10_core_area_m2": [core_stats["p10_m2"]],
-            "p50_core_area_m2": [core_stats["p50_m2"]],
-            "p90_core_area_m2": [core_stats["p90_m2"]],
-            "mean_para": [para_stats["mean"]],
-            "sd_para": [para_stats["sd"]],
-            "p10_para": [para_stats["p10"]],
-            "p50_para": [para_stats["p50"]],
-            "p90_para": [para_stats["p90"]],
-        })
+        result = pd.DataFrame(
+            {
+                "total_patches": [len(gdf)],
+                "total_area_m2": [gdf["area_m2"].sum()],
+                "mean_area_m2": [area_stats["mean_m2"]],
+                "sd_area_m2": [area_stats["sd_m2"]],
+                "min_area_m2": [area_stats["min_m2"]],
+                "max_area_m2": [area_stats["max_m2"]],
+                "p10_area_m2": [area_stats["p10_m2"]],
+                "p50_area_m2": [area_stats["p50_m2"]],
+                "p90_area_m2": [area_stats["p90_m2"]],
+                "mean_core_area_m2": [core_stats["mean_m2"]],
+                "sd_core_area_m2": [core_stats["sd_m2"]],
+                "p10_core_area_m2": [core_stats["p10_m2"]],
+                "p50_core_area_m2": [core_stats["p50_m2"]],
+                "p90_core_area_m2": [core_stats["p90_m2"]],
+                "mean_para": [para_stats["mean"]],
+                "sd_para": [para_stats["sd"]],
+                "p10_para": [para_stats["p10"]],
+                "p50_para": [para_stats["p50"]],
+                "p90_para": [para_stats["p90"]],
+            }
+        )
 
         return result
 
-    def calculate_class_metrics(
-        self, classified_raster: xr.DataArray
-    ) -> pd.DataFrame:
+    def calculate_class_metrics(self, classified_raster: xr.DataArray) -> pd.DataFrame:
         """
         Calculate class-level metrics (clumpiness, cohesion).
 
@@ -198,7 +197,9 @@ class LandscapeMetrics:
             cohesion = 0.0
         else:
             # Simple cohesion: ratio of largest component to total
-            component_sizes = ndimage.sum(water_pixels, labeled_array, range(num_features + 1))
+            component_sizes = ndimage.sum(
+                water_pixels, labeled_array, range(num_features + 1)
+            )
             largest_component = np.max(component_sizes[1:]) if num_features > 0 else 0
             cohesion = largest_component / total_pixels if total_pixels > 0 else 0.0
 
@@ -206,10 +207,12 @@ class LandscapeMetrics:
         cohesion = np.clip(cohesion, 0.0, 1.0)
 
         # Return as DataFrame
-        result = pd.DataFrame({
-            "clumpiness": [float(clumpiness)],
-            "cohesion": [float(cohesion)],
-        })
+        result = pd.DataFrame(
+            {
+                "clumpiness": [float(clumpiness)],
+                "cohesion": [float(cohesion)],
+            }
+        )
 
         return result
 

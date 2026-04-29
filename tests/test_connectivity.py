@@ -27,14 +27,17 @@ class TestAnalyzeConnectivity:
         """Test basic connectivity analysis."""
         # Create transect lines
 
-        transects = gpd.GeoDataFrame({
-            "transect_id": [0, 1, 2],
-            "geometry": [
-                LineString([(0, 20), (40, 20)]),  # Horizontal through polygons
-                LineString([(20, 0), (20, 40)]),  # Vertical through polygons
-                LineString([(50, 50), (60, 60)]),  # Outside polygons
-            ]
-        }, crs="EPSG:32610")
+        transects = gpd.GeoDataFrame(
+            {
+                "transect_id": [0, 1, 2],
+                "geometry": [
+                    LineString([(0, 20), (40, 20)]),  # Horizontal through polygons
+                    LineString([(20, 0), (20, 40)]),  # Vertical through polygons
+                    LineString([(50, 50), (60, 60)]),  # Outside polygons
+                ],
+            },
+            crs="EPSG:32610",
+        )
 
         analyzer = ConnectivityAnalyzer(sample_config)
         result = analyzer.analyze_connectivity(sample_water_polygons, transects)
@@ -46,14 +49,12 @@ class TestAnalyzeConnectivity:
         assert "percent_connected" in result.columns
         assert len(result) == 3
 
-    def test_analyze_connectivity_no_water(
-        self, sample_config: Config
-    ) -> None:
+    def test_analyze_connectivity_no_water(self, sample_config: Config) -> None:
         """Test error when water_polygons is empty."""
         empty_water = gpd.GeoDataFrame({"geometry": []}, crs="EPSG:32610")
-        transects = gpd.GeoDataFrame({
-            "geometry": [LineString([(0, 0), (10, 10)])]
-        }, crs="EPSG:32610")
+        transects = gpd.GeoDataFrame(
+            {"geometry": [LineString([(0, 0), (10, 10)])]}, crs="EPSG:32610"
+        )
 
         analyzer = ConnectivityAnalyzer(sample_config)
         with pytest.raises(ValueError, match="water_polygons"):
@@ -74,12 +75,15 @@ class TestAnalyzeConnectivity:
     ) -> None:
         """Test connectivity when transects don't intersect water."""
         # Transects far from water
-        transects = gpd.GeoDataFrame({
-            "geometry": [
-                LineString([(100, 100), (110, 110)]),
-                LineString([(200, 200), (210, 210)]),
-            ]
-        }, crs="EPSG:32610")
+        transects = gpd.GeoDataFrame(
+            {
+                "geometry": [
+                    LineString([(100, 100), (110, 110)]),
+                    LineString([(200, 200), (210, 210)]),
+                ]
+            },
+            crs="EPSG:32610",
+        )
 
         analyzer = ConnectivityAnalyzer(sample_config)
         result = analyzer.analyze_connectivity(sample_water_polygons, transects)
@@ -96,13 +100,16 @@ class TestCalculateConnectivityEndpoints:
         self, sample_config: Config
     ) -> None:
         """Test basic endpoint extraction."""
-        transects = gpd.GeoDataFrame({
-            "transect_id": [0, 1],
-            "geometry": [
-                LineString([(0, 0), (10, 10)]),
-                LineString([(5, 5), (15, 15)]),
-            ]
-        }, crs="EPSG:32610")
+        transects = gpd.GeoDataFrame(
+            {
+                "transect_id": [0, 1],
+                "geometry": [
+                    LineString([(0, 0), (10, 10)]),
+                    LineString([(5, 5), (15, 15)]),
+                ],
+            },
+            crs="EPSG:32610",
+        )
 
         analyzer = ConnectivityAnalyzer(sample_config)
         result = analyzer.calculate_connectivity_endpoints(transects)
@@ -118,9 +125,9 @@ class TestCalculateConnectivityEndpoints:
         self, sample_config: Config
     ) -> None:
         """Test that endpoint coordinates are correct."""
-        transects = gpd.GeoDataFrame({
-            "geometry": [LineString([(0, 0), (10, 20)])]
-        }, crs="EPSG:32610")
+        transects = gpd.GeoDataFrame(
+            {"geometry": [LineString([(0, 0), (10, 20)])]}, crs="EPSG:32610"
+        )
 
         analyzer = ConnectivityAnalyzer(sample_config)
         result = analyzer.calculate_connectivity_endpoints(transects)
@@ -148,10 +155,12 @@ class TestCalculateConnectivityStatistics:
         self, sample_config: Config
     ) -> None:
         """Test basic connectivity statistics calculation."""
-        connectivity_data = pd.DataFrame({
-            "transect_id": [0, 1, 2, 3, 4],
-            "connectivity_m": [10.0, 20.0, 30.0, 40.0, 50.0],
-        })
+        connectivity_data = pd.DataFrame(
+            {
+                "transect_id": [0, 1, 2, 3, 4],
+                "connectivity_m": [10.0, 20.0, 30.0, 40.0, 50.0],
+            }
+        )
 
         analyzer = ConnectivityAnalyzer(sample_config)
         stats = analyzer.calculate_connectivity_statistics(connectivity_data)
@@ -166,9 +175,11 @@ class TestCalculateConnectivityStatistics:
         self, sample_config: Config
     ) -> None:
         """Test that statistics values are correct."""
-        connectivity_data = pd.DataFrame({
-            "connectivity_m": [10.0, 20.0, 30.0, 40.0, 50.0],
-        })
+        connectivity_data = pd.DataFrame(
+            {
+                "connectivity_m": [10.0, 20.0, 30.0, 40.0, 50.0],
+            }
+        )
 
         analyzer = ConnectivityAnalyzer(sample_config)
         stats = analyzer.calculate_connectivity_statistics(connectivity_data)
@@ -202,33 +213,37 @@ class TestCalculateConnectivityStatistics:
 class TestIdentifyBottlenecks:
     """Tests for identify_bottlenecks method."""
 
-    def test_identify_bottlenecks_basic(
-        self, sample_config: Config
-    ) -> None:
+    def test_identify_bottlenecks_basic(self, sample_config: Config) -> None:
         """Test basic bottleneck identification."""
-        connectivity_data = pd.DataFrame({
-            "transect_id": [0, 1, 2, 3, 4],
-            "connectivity_m": [5.0, 10.0, 15.0, 20.0, 100.0],
-        })
+        connectivity_data = pd.DataFrame(
+            {
+                "transect_id": [0, 1, 2, 3, 4],
+                "connectivity_m": [5.0, 10.0, 15.0, 20.0, 100.0],
+            }
+        )
 
         analyzer = ConnectivityAnalyzer(sample_config)
-        bottlenecks = analyzer.identify_bottlenecks(connectivity_data, threshold_percentile=40.0)
+        bottlenecks = analyzer.identify_bottlenecks(
+            connectivity_data, threshold_percentile=40.0
+        )
 
         # Should identify transects in bottom 40%
         assert len(bottlenecks) >= 1
         assert bottlenecks["connectivity_m"].max() <= 16.0  # 40th percentile
 
-    def test_identify_bottlenecks_all_high(
-        self, sample_config: Config
-    ) -> None:
+    def test_identify_bottlenecks_all_high(self, sample_config: Config) -> None:
         """Test when all connectivity values are high."""
-        connectivity_data = pd.DataFrame({
-            "transect_id": [0, 1, 2],
-            "connectivity_m": [100.0, 100.0, 100.0],
-        })
+        connectivity_data = pd.DataFrame(
+            {
+                "transect_id": [0, 1, 2],
+                "connectivity_m": [100.0, 100.0, 100.0],
+            }
+        )
 
         analyzer = ConnectivityAnalyzer(sample_config)
-        bottlenecks = analyzer.identify_bottlenecks(connectivity_data, threshold_percentile=10.0)
+        bottlenecks = analyzer.identify_bottlenecks(
+            connectivity_data, threshold_percentile=10.0
+        )
 
         # All should be below 10th percentile (which is 100)
         assert len(bottlenecks) == 3
@@ -237,17 +252,17 @@ class TestIdentifyBottlenecks:
         self, sample_config: Config
     ) -> None:
         """Test error on invalid percentile."""
-        connectivity_data = pd.DataFrame({
-            "connectivity_m": [1, 2, 3, 4, 5],
-        })
+        connectivity_data = pd.DataFrame(
+            {
+                "connectivity_m": [1, 2, 3, 4, 5],
+            }
+        )
 
         analyzer = ConnectivityAnalyzer(sample_config)
         with pytest.raises(ValueError, match="between 0 and 100"):
             analyzer.identify_bottlenecks(connectivity_data, threshold_percentile=150.0)
 
-    def test_identify_bottlenecks_empty(
-        self, sample_config: Config
-    ) -> None:
+    def test_identify_bottlenecks_empty(self, sample_config: Config) -> None:
         """Test error on empty connectivity_data."""
         empty_data = pd.DataFrame({"connectivity_m": []})
 
@@ -264,15 +279,18 @@ class TestConnectivityWorkflow:
     ) -> None:
         """Test complete connectivity analysis workflow."""
         # Create transect lines
-        transects = gpd.GeoDataFrame({
-            "geometry": [
-                LineString([(0, 20), (40, 20)]),
-                LineString([(20, 0), (20, 40)]),
-                LineString([(50, 50), (60, 60)]),
-                LineString([(10, 10), (30, 30)]),
-                LineString([(5, 35), (35, 5)]),
-            ]
-        }, crs="EPSG:32610")
+        transects = gpd.GeoDataFrame(
+            {
+                "geometry": [
+                    LineString([(0, 20), (40, 20)]),
+                    LineString([(20, 0), (20, 40)]),
+                    LineString([(50, 50), (60, 60)]),
+                    LineString([(10, 10), (30, 30)]),
+                    LineString([(5, 35), (35, 5)]),
+                ]
+            },
+            crs="EPSG:32610",
+        )
 
         analyzer = ConnectivityAnalyzer(sample_config)
 
@@ -289,6 +307,8 @@ class TestConnectivityWorkflow:
         assert stats["mean_connectivity_m"] >= 0
 
         # Step 4: Identify bottlenecks
-        bottlenecks = analyzer.identify_bottlenecks(connectivity, threshold_percentile=50.0)
+        bottlenecks = analyzer.identify_bottlenecks(
+            connectivity, threshold_percentile=50.0
+        )
         assert len(bottlenecks) >= 0
         assert len(bottlenecks) <= len(connectivity)

@@ -5,7 +5,6 @@ Measures lateral connectivity of flooded areas using transect lines
 and water level measurements at endpoints.
 """
 
-
 import geopandas as gpd
 import numpy as np
 import pandas as pd
@@ -105,14 +104,18 @@ class ConnectivityAnalyzer:
                 num_intersections = len(intersecting_water)
 
             # Calculate percent connected
-            percent_connected = (connectivity_m / total_length * 100) if total_length > 0 else 0.0
+            percent_connected = (
+                (connectivity_m / total_length * 100) if total_length > 0 else 0.0
+            )
 
-            results.append({
-                "transect_id": transect_id,
-                "connectivity_m": connectivity_m,
-                "num_intersections": num_intersections,
-                "percent_connected": percent_connected,
-            })
+            results.append(
+                {
+                    "transect_id": transect_id,
+                    "connectivity_m": connectivity_m,
+                    "num_intersections": num_intersections,
+                    "percent_connected": percent_connected,
+                }
+            )
 
         result_df = pd.DataFrame(results)
         return result_df
@@ -173,13 +176,15 @@ class ConnectivityAnalyzer:
             # End point
             end_x, end_y = coords[-1][0], coords[-1][1]
 
-            results.append({
-                "transect_id": transect_id,
-                "start_x": start_x,
-                "start_y": start_y,
-                "end_x": end_x,
-                "end_y": end_y,
-            })
+            results.append(
+                {
+                    "transect_id": transect_id,
+                    "start_x": start_x,
+                    "start_y": start_y,
+                    "end_x": end_x,
+                    "end_y": end_y,
+                }
+            )
 
         result_df = pd.DataFrame(results)
         return result_df
@@ -219,7 +224,9 @@ class ConnectivityAnalyzer:
         if "connectivity_m" not in connectivity_data.columns:
             raise ValueError("connectivity_data must have 'connectivity_m' column")
 
-        connectivity_values = np.asarray(connectivity_data["connectivity_m"].values, dtype=float)
+        connectivity_values = np.asarray(
+            connectivity_data["connectivity_m"].values, dtype=float
+        )
 
         # Calculate statistics
         stats = {
@@ -273,7 +280,9 @@ class ConnectivityAnalyzer:
         if "connectivity_m" not in connectivity_data.columns:
             raise ValueError("connectivity_data must have 'connectivity_m' column")
 
-        connectivity_values = np.asarray(connectivity_data["connectivity_m"].values, dtype=float)
+        connectivity_values = np.asarray(
+            connectivity_data["connectivity_m"].values, dtype=float
+        )
 
         # Calculate threshold value
         threshold_value = np.percentile(connectivity_values, threshold_percentile)  # type: ignore

@@ -1,6 +1,5 @@
 """Tests for spatio_hydrograph.habitat_analysis module."""
 
-
 import geopandas as gpd
 import pandas as pd
 import pytest
@@ -39,9 +38,7 @@ class TestCalculateHabitatAreas:
         assert "num_features" in result.columns
         assert len(result) == 3
 
-    def test_calculate_habitat_areas_aggregation(
-        self, sample_config: Config
-    ) -> None:
+    def test_calculate_habitat_areas_aggregation(self, sample_config: Config) -> None:
         """Test that areas are properly aggregated by habitat."""
         # Create test data with multiple polygons per habitat
         from shapely.geometry import Polygon
@@ -96,14 +93,14 @@ class TestCalculateHabitatAreas:
 class TestCalculatePercentInundated:
     """Tests for calculate_percent_inundated method."""
 
-    def test_calculate_percent_inundated_no_config(
-        self, sample_config: Config
-    ) -> None:
+    def test_calculate_percent_inundated_no_config(self, sample_config: Config) -> None:
         """Test percent calculation without habitat area config."""
-        habitat_areas = pd.DataFrame({
-            "habitat": ["First", "Middle"],
-            "inundated_area_ha": [5.0, 10.0],
-        })
+        habitat_areas = pd.DataFrame(
+            {
+                "habitat": ["First", "Middle"],
+                "inundated_area_ha": [5.0, 10.0],
+            }
+        )
 
         analyzer = HabitatAnalyzer(sample_config)
         result = analyzer.calculate_percent_inundated(habitat_areas)
@@ -128,10 +125,12 @@ class TestIdentifyFloodStatus:
 
     def test_identify_flood_status_all_dry(self, sample_config: Config) -> None:
         """Test flood status when no habitats are flooded."""
-        habitat_areas = pd.DataFrame({
-            "habitat": ["First", "Middle", "Last"],
-            "inundated_area_ha": [0.0, 0.0, 0.0],
-        })
+        habitat_areas = pd.DataFrame(
+            {
+                "habitat": ["First", "Middle", "Last"],
+                "inundated_area_ha": [0.0, 0.0, 0.0],
+            }
+        )
 
         analyzer = HabitatAnalyzer(sample_config)
         status = analyzer.identify_flood_status(habitat_areas)
@@ -141,10 +140,12 @@ class TestIdentifyFloodStatus:
 
     def test_identify_flood_status_mixed(self, sample_config: Config) -> None:
         """Test flood status with mixed flooded/dry habitats."""
-        habitat_areas = pd.DataFrame({
-            "habitat": ["First", "Middle", "Last"],
-            "inundated_area_ha": [5.0, 0.0, 10.0],
-        })
+        habitat_areas = pd.DataFrame(
+            {
+                "habitat": ["First", "Middle", "Last"],
+                "inundated_area_ha": [5.0, 0.0, 10.0],
+            }
+        )
 
         analyzer = HabitatAnalyzer(sample_config)
         status = analyzer.identify_flood_status(habitat_areas)
@@ -155,19 +156,19 @@ class TestIdentifyFloodStatus:
 
     def test_identify_flood_status_all_flooded(self, sample_config: Config) -> None:
         """Test flood status when all habitats are flooded."""
-        habitat_areas = pd.DataFrame({
-            "habitat": ["First", "Middle", "Last"],
-            "inundated_area_ha": [5.0, 10.0, 15.0],
-        })
+        habitat_areas = pd.DataFrame(
+            {
+                "habitat": ["First", "Middle", "Last"],
+                "inundated_area_ha": [5.0, 10.0, 15.0],
+            }
+        )
 
         analyzer = HabitatAnalyzer(sample_config)
         status = analyzer.identify_flood_status(habitat_areas)
 
         assert all(v for v in status.values())
 
-    def test_identify_flood_status_missing_columns(
-        self, sample_config: Config
-    ) -> None:
+    def test_identify_flood_status_missing_columns(self, sample_config: Config) -> None:
         """Test error on missing required columns."""
         habitat_areas = pd.DataFrame({"habitat": ["First"]})
 
@@ -250,9 +251,7 @@ class TestAggregateByWaterYear:
         with pytest.raises(ValueError, match="Missing required columns"):
             analyzer.aggregate_by_water_year(time_series)
 
-    def test_aggregate_by_water_year_no_flood_days(
-        self, sample_config: Config
-    ) -> None:
+    def test_aggregate_by_water_year_no_flood_days(self, sample_config: Config) -> None:
         """Test aggregation with no flooding days."""
         dates = pd.date_range("2023-10-01", periods=30, freq="D")
         data = {
@@ -274,9 +273,7 @@ class TestAggregateByWaterYear:
 class TestHabitatAnalysisWorkflow:
     """Integration tests for habitat analysis workflow."""
 
-    def test_full_habitat_analysis_workflow(
-        self, sample_config: Config
-    ) -> None:
+    def test_full_habitat_analysis_workflow(self, sample_config: Config) -> None:
         """Test complete habitat analysis workflow."""
         # Create test water polygons
         from shapely.geometry import Polygon

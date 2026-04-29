@@ -5,7 +5,6 @@ Calculates per-habitat inundated area, percent water coverage,
 and flood duration metrics.
 """
 
-
 import geopandas as gpd
 import pandas as pd
 
@@ -26,9 +25,7 @@ class HabitatAnalyzer:
         """
         self.config = config
 
-    def calculate_habitat_areas(
-        self, water_polygons: gpd.GeoDataFrame
-    ) -> pd.DataFrame:
+    def calculate_habitat_areas(self, water_polygons: gpd.GeoDataFrame) -> pd.DataFrame:
         """
         Calculate inundated area per habitat.
 
@@ -55,20 +52,28 @@ class HabitatAnalyzer:
         """
         # Check for required columns
         required_cols = ["habitat", "area_m2"]
-        missing_cols = [col for col in required_cols if col not in water_polygons.columns]
+        missing_cols = [
+            col for col in required_cols if col not in water_polygons.columns
+        ]
         if missing_cols:
-            raise ValueError(f"Missing required columns in water_polygons: {missing_cols}")
+            raise ValueError(
+                f"Missing required columns in water_polygons: {missing_cols}"
+            )
 
         # Group by habitat and aggregate
-        habitat_summary = water_polygons.groupby("habitat").agg({
-            "area_m2": ["sum", "count"]
-        }).reset_index()
+        habitat_summary = (
+            water_polygons.groupby("habitat")
+            .agg({"area_m2": ["sum", "count"]})
+            .reset_index()
+        )
 
         # Flatten column names
         habitat_summary.columns = ["habitat", "inundated_area_m2", "num_features"]
 
         # Convert square meters to hectares (1 ha = 10,000 m²)
-        habitat_summary["inundated_area_ha"] = habitat_summary["inundated_area_m2"] / 10000
+        habitat_summary["inundated_area_ha"] = (
+            habitat_summary["inundated_area_m2"] / 10000
+        )
 
         # Return only relevant columns
         return habitat_summary[["habitat", "inundated_area_ha", "num_features"]].copy()
@@ -104,7 +109,9 @@ class HabitatAnalyzer:
         """
         # Check for required columns
         required_cols = ["habitat", "inundated_area_ha"]
-        missing_cols = [col for col in required_cols if col not in habitat_areas.columns]
+        missing_cols = [
+            col for col in required_cols if col not in habitat_areas.columns
+        ]
         if missing_cols:
             raise ValueError(f"Missing required columns: {missing_cols}")
 
@@ -147,7 +154,9 @@ class HabitatAnalyzer:
         """
         # Check for required columns
         required_cols = ["habitat", "inundated_area_ha"]
-        missing_cols = [col for col in required_cols if col not in habitat_areas.columns]
+        missing_cols = [
+            col for col in required_cols if col not in habitat_areas.columns
+        ]
         if missing_cols:
             raise ValueError(f"Missing required columns: {missing_cols}")
 
@@ -156,7 +165,9 @@ class HabitatAnalyzer:
         # Map habitat names to total areas
         result["total_habitat_area_ha"] = result["habitat"].map(habitat_total_areas)
         if result["total_habitat_area_ha"].isna().any():
-            missing_habitats = result[result["total_habitat_area_ha"].isna()]["habitat"].tolist()
+            missing_habitats = result[result["total_habitat_area_ha"].isna()][
+                "habitat"
+            ].tolist()
             raise ValueError(
                 f"Some habitats not found in habitat_total_areas: {missing_habitats}"
             )
@@ -197,7 +208,9 @@ class HabitatAnalyzer:
         """
         # Check for required columns
         required_cols = ["habitat", "inundated_area_ha"]
-        missing_cols = [col for col in required_cols if col not in habitat_areas.columns]
+        missing_cols = [
+            col for col in required_cols if col not in habitat_areas.columns
+        ]
         if missing_cols:
             raise ValueError(f"Missing required columns: {missing_cols}")
 
@@ -246,7 +259,9 @@ class HabitatAnalyzer:
         """
         # Check for required columns
         required_cols = ["date", "habitat", "inundated_area_ha"]
-        missing_cols = [col for col in required_cols if col not in habitat_time_series.columns]
+        missing_cols = [
+            col for col in required_cols if col not in habitat_time_series.columns
+        ]
         if missing_cols:
             raise ValueError(f"Missing required columns: {missing_cols}")
 
@@ -275,14 +290,16 @@ class HabitatAnalyzer:
                 first_flood = pd.NaT
                 last_flood = pd.NaT
 
-            stats.append({
-                "habitat": habitat_name,
-                "max_inundated_area_ha": max_area,
-                "mean_inundated_area_ha": mean_area,
-                "num_inundation_days": inundation_days,
-                "first_flood_date": first_flood,
-                "last_flood_date": last_flood,
-            })
+            stats.append(
+                {
+                    "habitat": habitat_name,
+                    "max_inundated_area_ha": max_area,
+                    "mean_inundated_area_ha": mean_area,
+                    "num_inundation_days": inundation_days,
+                    "first_flood_date": first_flood,
+                    "last_flood_date": last_flood,
+                }
+            )
 
         result = pd.DataFrame(stats)
 
